@@ -9,9 +9,6 @@
 package com.zsmartsystems.openhab.firmwareprovider;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
@@ -23,22 +20,21 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.core.ConfigConstants;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.binding.firmware.Firmware;
-import org.eclipse.smarthome.core.thing.binding.firmware.FirmwareBuilder;
 import org.eclipse.smarthome.core.thing.firmware.FirmwareProvider;
-import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zsmartsystems.openhab.firmwareprovider.internal.DirectoryFileEntry;
 import com.zsmartsystems.openhab.firmwareprovider.internal.DirectoryReader;
 
 /**
  * A simple firmware provider.
  *
- * This allows users to create an XML directory and place binary files into a folder to be provided to the openHAB
- * framework.
+ * This allows users to create a zipped file containing an XML directory and the respective binary files into a folder
+ * to be provided to the openHAB framework.
  *
  * @author Chris Jackson
  */
@@ -71,12 +67,12 @@ public class SimpleFirmwareProvider implements FirmwareProvider {
             locale = Locale.getDefault();
         }
 
-        Map<Firmware, String> directory = directoryReader.getDirectory();
-        Firmware foundFirmware = null;
-        for (Entry<Firmware, String> firmwareSet : directory.entrySet()) {
+        Map<Firmware, DirectoryFileEntry> directory = directoryReader.getDirectory();
+        DirectoryFileEntry foundFirmware = null;
+        for (Entry<Firmware, DirectoryFileEntry> firmwareSet : directory.entrySet()) {
             Firmware firmware = firmwareSet.getKey();
             if (firmware.getThingTypeUID().equals(thing.getThingTypeUID()) && firmware.getVersion().equals(version)) {
-                foundFirmware = firmware;
+                foundFirmware = firmwareSet.getValue();
                 break;
             }
         }
@@ -86,23 +82,7 @@ public class SimpleFirmwareProvider implements FirmwareProvider {
             return null;
         }
 
-        URL entry = FrameworkUtil.getBundle(SimpleFirmwareProvider.class)
-                .getEntry("firmware/" + directory.get(foundFirmware));
-        if (entry == null) {
-            logger.debug("Unable to open firmware file {}", foundFirmware);
-            return null;
-        }
-
-        InputStream stream;
-        try {
-            stream = entry.openStream();
-        } catch (IOException e) {
-            logger.debug("IO Exception", e);
-            return null;
-        }
-
-        return FirmwareBuilder.create(foundFirmware.getThingTypeUID(), foundFirmware.getVersion())
-                .withInputStream(stream).build();
+        return directoryReader.getFirmware(foundFirmware);
     }
 
     @Override

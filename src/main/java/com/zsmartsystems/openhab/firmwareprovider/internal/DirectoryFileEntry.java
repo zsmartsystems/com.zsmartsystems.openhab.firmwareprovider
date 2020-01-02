@@ -14,45 +14,100 @@ package com.zsmartsystems.openhab.firmwareprovider.internal;
  *
  */
 public class DirectoryFileEntry {
+    private String providerFilename;
+
     private String filename;
+    private Integer filesize;
     private String thingTypeUid;
     private String version;
+    private String prerequisiteVersion;
     private String model;
     private String vendor;
+    private String description;
+    private String hash;
+
+    /**
+     * @return the providerFilename
+     */
+    public String getProviderFilename() {
+        return providerFilename;
+    }
+
+    /**
+     * @param providerFilename the providerFilename to set
+     */
+    public void setProviderFilename(String providerFilename) {
+        this.providerFilename = providerFilename;
+    }
 
     /**
      * @return the filename
      */
     public String getFilename() {
-        return filename;
+        return filename == null ? "" : filename;
+    }
+
+    /**
+     * @return the filesize
+     */
+    public Integer getFilesize() {
+        return filesize;
+    }
+
+    /**
+     * @param filesize the filesize to set
+     */
+    public void setFilesize(Integer filesize) {
+        this.filesize = filesize;
     }
 
     /**
      * @return the thingTypeUid
      */
     public String getThingTypeUid() {
-        return thingTypeUid;
+        return thingTypeUid == null ? "" : thingTypeUid;
     }
 
     /**
      * @return the version
      */
     public String getVersion() {
-        return version;
+        return version == null ? "" : version;
     }
 
     /**
      * @return the model
      */
     public String getModel() {
-        return model;
+        return model == null ? "" : model;
     }
 
     /**
      * @return the vendor
      */
     public String getVendor() {
-        return vendor;
+        return vendor == null ? "" : vendor;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description == null ? "" : description;
+    }
+
+    /**
+     * @return the hash
+     */
+    public String getHash() {
+        return hash == null ? "" : hash;
+    }
+
+    /**
+     * @return the prerequisiteVersion
+     */
+    public String getPrerequisiteVersion() {
+        return prerequisiteVersion == null ? "" : prerequisiteVersion;
     }
 
 }
