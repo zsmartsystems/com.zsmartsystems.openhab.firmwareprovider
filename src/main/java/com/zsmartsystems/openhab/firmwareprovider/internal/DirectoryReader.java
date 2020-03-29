@@ -132,6 +132,11 @@ public class DirectoryReader {
             e.printStackTrace();
         }
 
+        if (directoryXml.isEmpty()) {
+            logger.error("Firmware file {} myst contain the directory file'" + DIRECTORY_NAME + "'", filename);
+            return;
+        }
+
         XStream stream = new XStream(new StaxDriver());
         stream.setClassLoader(this.getClass().getClassLoader());
         stream.alias("Directory", HashSet.class);
