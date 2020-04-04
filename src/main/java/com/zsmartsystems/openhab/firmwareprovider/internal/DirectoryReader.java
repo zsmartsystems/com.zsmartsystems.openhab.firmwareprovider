@@ -163,6 +163,20 @@ public class DirectoryReader {
 
             FirmwareBuilder builder = getFirmwareBuilder(directoryEntry);
 
+            if (directoryEntry.getModel() != null) {
+                builder.withModelRestricted(true);
+                builder.withModel(directoryEntry.getModel());
+            }
+            if (directoryEntry.getVendor() != null) {
+                builder.withVendor(directoryEntry.getVendor());
+            }
+            if (directoryEntry.getHash() != null) {
+                builder.withMd5Hash(directoryEntry.getHash());
+            }
+            if (directoryEntry.getDescription() != null) {
+                builder.withDescription(directoryEntry.getDescription());
+            }
+
             directoryEntry.setProviderFilename(directoryFile.getName());
             directoryEntry.setFilesize(filenames.get(directoryEntry.getFilename()));
             directoryUpdates.put(builder.build(), directoryEntry);
