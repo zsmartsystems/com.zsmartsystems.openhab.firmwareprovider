@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018-2020 by Z-Smart Systems Ltd.
+ * Copyright (c) 2018-2021 by Z-Smart Systems Ltd.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,9 +37,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.binding.firmware.Firmware;
-import org.eclipse.smarthome.core.thing.binding.firmware.FirmwareBuilder;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.binding.firmware.Firmware;
+import org.openhab.core.thing.binding.firmware.FirmwareBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

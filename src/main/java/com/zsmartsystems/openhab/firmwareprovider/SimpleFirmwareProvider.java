@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2018-2020 by Z-Smart Systems Ltd.
+ * Copyright (c) 2018-2021 by Z-Smart Systems Ltd.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,10 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.core.ConfigConstants;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.binding.firmware.Firmware;
-import org.eclipse.smarthome.core.thing.firmware.FirmwareProvider;
+import org.openhab.core.OpenHAB;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.binding.firmware.Firmware;
+import org.openhab.core.thing.firmware.FirmwareProvider;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -46,7 +46,7 @@ public class SimpleFirmwareProvider implements FirmwareProvider {
 
     @Activate
     protected void activate() {
-        String folder = ConfigConstants.getUserDataFolder() + File.separator + "firmware" + File.separator;
+        String folder = OpenHAB.getUserDataFolder() + File.separator + "firmware" + File.separator;
         directoryReader = new DirectoryReader(folder);
     }
 
@@ -63,10 +63,6 @@ public class SimpleFirmwareProvider implements FirmwareProvider {
 
     @Override
     public @Nullable Firmware getFirmware(@NonNull Thing thing, @NonNull String version, @Nullable Locale locale) {
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
         Map<Firmware, DirectoryFileEntry> directory = directoryReader.getDirectory();
         DirectoryFileEntry foundFirmware = null;
         for (Entry<Firmware, DirectoryFileEntry> firmwareSet : directory.entrySet()) {
@@ -92,10 +88,6 @@ public class SimpleFirmwareProvider implements FirmwareProvider {
 
     @Override
     public @Nullable Set<@NonNull Firmware> getFirmwares(@NonNull Thing thing, @Nullable Locale locale) {
-        if (locale == null) {
-            locale = Locale.getDefault();
-        }
-
         final Set<Firmware> firmwareSet = new HashSet<>();
 
         for (Firmware firmware : directoryReader.getDirectory().keySet()) {
@@ -105,5 +97,4 @@ public class SimpleFirmwareProvider implements FirmwareProvider {
         }
         return firmwareSet;
     }
-
 }
